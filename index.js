@@ -16,14 +16,8 @@ const client = mqtt.connect(connectUrl, {
     reconnectPeriod: 1000,
 })
 
-
-
-
-
 client.on('connect', () => {
-    client.subscribe([TOPICS.fromStaticToServer, TOPICS.fromCarToServer, TOPICS.fromFrontToServer], () => {
-        console.log("subscribe")
-    })
+    client.subscribe([TOPICS.fromStaticToServer, TOPICS.fromCarToServer, TOPICS.fromFrontToServer], () => {})
 })
 
 client.on('message', (topic, payload) => {
@@ -34,10 +28,10 @@ client.on('message', (topic, payload) => {
             client.publish(TOPICS.fromServerToFrontCar, payload.toString())
             break
         case TOPICS.fromStaticToServer:
-            console.log("topic: ",topic)
             client.publish(TOPICS.fromServerToFrontStatic, payload.toString())
+            // client.publish(TOPICS.fromServerToWheels, payload.toString())
             break
-        case TOPICS.fromServerToWheels:
+        case TOPICS.fromFrontToServer:
             client.publish(TOPICS.fromServerToWheels, payload.toString())
             break
         default:

@@ -16,11 +16,18 @@ const client = mqtt.connect(connectUrl, {
     reconnectPeriod: 1000,
 })
 
+let time=0
+const direction = ['up', 'down', 'left', 'right']
+
+function getRandomFromArray(array=[]){
+    return array[Math.floor(Math.random()*array.length)]
+}
+
 
 client.on('connect', () => {
-    client.subscribe([TOPICS.fromServerToWheels], () => {})
+    setInterval(()=>{
+        time+=1
+        client.publish(TOPICS.fromFrontToServer,`${getRandomFromArray(direction)}`)
+    },1000)
 })
 
-client.on('message', (topic, payload) => {
-    console.log('Payload: ', payload.toString())
-})
